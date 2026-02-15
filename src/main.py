@@ -182,3 +182,30 @@ async def completions(request: Request) -> Any:
 async def responses(request: Request) -> Any:
     payload = await request.json()
     return await _proxy_passthrough(payload, bool(payload.get("stream")), request)
+
+
+@app.get("/v1/models")
+async def models(request: Request) -> Any:
+    upstream_url = settings.upstream_models_url()
+    headers = _build_upstream_headers(request)
+    timeout = httpx.Timeout(settings.request_timeout)
+
+    async with httpx.AsyncClient(timeout=timeout) as client:
+        start = time.time()
+        try:
+            response = await client.get(upstream_url, headers=headers, params=request.query_params)
+        except httpx.RequestError as exc:
+            logger.error("upstream.request_error", error=str(exc))
+            return JSONResponse(status_code=502, content={"error": "upstream_unreachable"})
+
+        elapsed_ms = int((time.time() - start) * 1000)
+        logger.info(
+            "upstream.response",
+            status=response.status_code,
+            elapsed_ms=elapsed_ms,
+        )
+
+        if response.status_code >= 400:
+            return JSONResponse(status_code=response.status_code, content={"error": response.text})
+
+        return JSONResponse(content=response.json())
