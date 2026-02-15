@@ -80,4 +80,5 @@ if ($ApiKey) {
   $env:UPSTREAM_API_KEY = $ApiKey
 }
 
-& "$VenvDir\Scripts\python.exe" -m uvicorn src.main:app --host 0.0.0.0 --port $Port
+& "$VenvDir\Scripts\python.exe" -m uvicorn --app-dir "$RootDir\src" openai_responses_bridge.main:app `
+  --host 0.0.0.0 --port $Port

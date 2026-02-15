@@ -17,6 +17,7 @@ Lightweight reverse proxy that adapts legacy `/v1/chat/completions` and `/v1/com
 ## 快速开始 | Quick Start
 
 > 先下载项目，然后执行一行命令。以下命令会提示输入上游地址，并依次校验：`URL`、`URL/responses`、`URL/v1/responses`，全部通过才会启动。
+> 需要先安装 `uv`（Python 项目管理工具）。
 
 ### 方式一：下载 ZIP | Download ZIP
 
@@ -96,10 +97,10 @@ curl http://localhost:8000/healthz
 
 ## 扩展点 | Extensibility
 
-- 自定义参数映射：`src/adapter.py`
-- 自定义流式转换：`src/streaming.py`
-- 日志与可观测：`src/logging_setup.py`
-- 配置与鉴权：`src/config.py`
+- 自定义参数映射：`src/openai_responses_bridge/adapter.py`
+- 自定义流式转换：`src/openai_responses_bridge/streaming.py`
+- 日志与可观测：`src/openai_responses_bridge/logging_setup.py`
+- 配置与鉴权：`src/openai_responses_bridge/config.py`
 
 ## 日志 | Logging
 
@@ -133,5 +134,6 @@ curl http://localhost:8000/v1/responses \
 ## 运行测试 | Tests
 
 ```bash
+uv sync --dev
 .venv/bin/pytest
 ```

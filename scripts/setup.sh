@@ -4,16 +4,14 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 VENV_DIR="${ROOT_DIR}/.venv"
 
-if ! command -v python3 >/dev/null 2>&1; then
-  echo "python3 is required but was not found in PATH." >&2
+if ! command -v uv >/dev/null 2>&1; then
+  echo "uv is required but was not found in PATH." >&2
   exit 1
 fi
 
-if [ ! -d "${VENV_DIR}" ]; then
-  python3 -m venv "${VENV_DIR}"
-fi
-
-"${VENV_DIR}/bin/python" -m pip install --upgrade pip
-"${VENV_DIR}/bin/pip" install -r "${ROOT_DIR}/requirements.txt"
+(
+  cd "${ROOT_DIR}"
+  UV_PROJECT_ENVIRONMENT="${VENV_DIR}" uv sync
+)
 
 echo "Setup complete."

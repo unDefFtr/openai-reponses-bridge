@@ -105,4 +105,5 @@ if [ -n "${API_KEY}" ]; then
   export UPSTREAM_API_KEY="${API_KEY}"
 fi
 
-"${VENV_DIR}/bin/python" -m uvicorn src.main:app --host 0.0.0.0 --port "${PORT}"
+"${VENV_DIR}/bin/python" -m uvicorn --app-dir "${ROOT_DIR}/src" openai_responses_bridge.main:app \
+  --host 0.0.0.0 --port "${PORT}"

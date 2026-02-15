@@ -1,4 +1,4 @@
-from src.adapter import build_responses_request, to_chat_completions
+from openai_responses_bridge.adapter import build_responses_request, to_chat_completions
 
 
 def test_build_responses_request_maps_tokens_and_model():
